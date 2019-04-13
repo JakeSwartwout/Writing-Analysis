@@ -2,7 +2,6 @@
 #define GRAPH_HPP
 
 #include <vector>
-#include <list>
 #include <iostream>
 
 struct vertex;
@@ -24,7 +23,7 @@ struct vertex
 
 struct trieNode{
   char character;
-  list<trieNode*> nextLetters;
+  vector<trieNode*> nextLetters;
   vertex* word;
 };
 
@@ -47,12 +46,14 @@ class Graph
 
     //recursively deletes the tree
     void deleteTrieHelper(trieNode*& root);
-    //searches through the trie to find the vertex
+    //searches through the trie to find the vertex, returns NULL if not found
     vertex* findVertex(string word);
     //creates a new vertex with the word
-    void createWord(string word);
+    vertex* createWord(string word);
     //creates a connection or increases the count between the two words
     void createConnection(vertex* word1, vertex* word2);
+    //recursively goes through the trie to display all of the vertices
+    void displayEdgesHelper(trieNode* root);
 };
 
 #endif // GRAPH_HPP
