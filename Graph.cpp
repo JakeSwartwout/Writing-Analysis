@@ -16,8 +16,8 @@ Graph::~Graph(){
 
 //
 void Graph::readInSaveWord(string word, string previous, int count){
-    vertex* wrd = findVertex(word);
-    vertex* prev = findVertex(previous);
+    Vertex* wrd = findVertex(word);
+    Vertex* prev = findVertex(previous);
 
     if(wrd == NULL){
     wrd = createWord(word);
