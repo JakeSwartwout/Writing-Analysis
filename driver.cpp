@@ -24,6 +24,7 @@ int main(int argv, const char *argc[]){
         //Main variabe declaration. stringInput, intInput and the fileReader
         ifstream fileReader;
         string sInput;
+        string dataSave;
         int iInput;
         Graph graph;
         bool keepRunning = true;
@@ -49,9 +50,22 @@ int main(int argv, const char *argc[]){
                     }
                     break;
                 case 2:
-
+                    cout << "Enter the name of the saved data file that you would like me to retrieve." <<endl;
+                    cin >> dataSave;
+                    graph.readInSaveFile(dataSave);
                     break;
                 case 3:
+                    cout << "Enter the name of the data file that you would like me to save your current session in." <<endl;
+                    cin >> dataSave;
+                    graph.saveToFile(dataSave);
+                    break;
+                case 4:
+                    graph.displayEdges();
+                    break;
+                case 5:
+
+                    break;
+                case 6:
                     cout << "Goodbye! " << endl;
                     keepRunning = false;
                     break;
@@ -70,9 +84,12 @@ int main(int argv, const char *argc[]){
 }
 
 void printMenu(){
-    cout << "||1. Read in file     ||" << endl;
-    cout << "||2. Some other Option||" << endl;
-    cout << "||3. Quit             ||" << endl;
+    cout << "||1. Read in file        ||" << endl;
+    cout << "||2. Open Saved data     ||" << endl;
+    cout << "||3. Save current data   ||" << endl;
+    cout << "||4. Display current data||" << endl;
+    cout << "||5. Make prediction     ||" << endl;
+    cout << "||6. Quit                ||" << endl;
 }
 void printPairsOfWords(ifstream *fileReader, Graph *graph){
     string current, previous;
