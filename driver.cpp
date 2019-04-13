@@ -105,8 +105,10 @@ void printPairsOfWords(ifstream *fileReader, Graph *graph){
 //To be implemented Later
 string cleanWord(string word){
     string returnString = word;
-    if(word[word.length() -1] == ',' || word[word.length() -1] == '.')
-        returnString = word.substr(0, word.length() - 1);
+    while(ispunct(returnString[returnString.length() -1]))
+        returnString = returnString.substr(0, returnString.length() - 1);
+    while(ispunct(returnString[0]))
+        returnString = returnString.substr(1);
     transform(returnString.begin(), returnString.end(), returnString.begin(), ::tolower);
     return returnString;
 }
