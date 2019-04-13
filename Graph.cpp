@@ -40,7 +40,7 @@ void Graph::readInWord(string previous, string word){
 }
 
 //readInWord, but from the save file (known frequency number)
-void Graph::readInSaveWord(string word, string previous, int count){
+void Graph::readInSaveWord(string previous, string word, int count){
     Vertex* wrd = findVertex(word);
     Vertex* prev = findVertex(previous);
 
@@ -81,7 +81,7 @@ void Graph::readInSaveFile(string fileName){
             newWord = temp;
             getline(word,temp,',');
             wordFreq = stoi(temp);
-            readInSaveWord(newWord, prev, wordFreq);
+            readInSaveWord(prev, newWord, wordFreq);
         }
     }
     reader.close();
