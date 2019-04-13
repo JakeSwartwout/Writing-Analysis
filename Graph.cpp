@@ -1,8 +1,9 @@
 #include "Graph.hpp"
 #include <vector>
 #include <iostream>
-#include <sstream>
 #include <fstream>
+#include <string>
+#include <sstream>
 using namespace std;
 
 
@@ -49,9 +50,9 @@ void Graph::readInSaveFile(string fileName){
     string prev;
     int wordFreq;
     while (getline(reader, temp)){
-        word.str("");
+        //word.str("");
         word << temp;
-        temp.clear();
+        //temp.clear();
         getline(word, temp,',');
         prev = temp;
         createWord(temp);
