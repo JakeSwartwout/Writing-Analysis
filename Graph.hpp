@@ -22,7 +22,8 @@ struct vertex
 };
 
 struct trieNode{
-
+  //a
+  trieNode* next[]
 };
 
 class Graph
@@ -32,10 +33,6 @@ class Graph
     ~Graph();
     //either increases the word's frequency or creates a new one and connects it
     void readInWord(string word, string previous);
-    //creates a new vertex with the word
-    void addWord(string word);
-    //creates a connection or increases the count between the two words
-    void createConnection(string word1, string word2); //maybe change these to vertex pointers?
     //prints all of the nodes and all of their connections
     void displayEdges();
 
@@ -44,6 +41,10 @@ class Graph
     std::vector<vertex> vertices; //stores vertices
 
     vertex *findVertex(std::string name);
+    //creates a new vertex with the word
+    void addWord(string word);
+    //creates a connection or increases the count between the two words
+    void createConnection(string word1, string word2); //maybe change these to vertex pointers?
 
 };
 
