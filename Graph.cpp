@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <algorithm>
 using namespace std;
 
 
@@ -16,6 +17,26 @@ Graph::Graph(){
 
 Graph::~Graph(){
   deleteTrieHelper(root);
+}
+
+//deals with finding the word, then adds a node if needed and calls createConnection
+void Graph::readInWord(string previous, string word){
+  //find them
+  Vertex* prev = findVertex(previous);
+  Vertex* wrd = findVertex(word);
+
+
+  //if it doesn't exist
+  if(prev == nullptr){
+    prev = createWord(previous);
+  }
+  if(wrd == nullptr){
+    wrd = createWord(word);
+  }
+
+  //cout << "Got to here" << endl;
+  createConnection(prev, wrd);
+  //cout << "Completed connections" << endl;
 }
 
 //readInWord, but from the save file (known frequency number)
@@ -60,7 +81,7 @@ void Graph::readInSaveFile(string fileName){
             newWord = temp;
             getline(word,temp,',');
             wordFreq = stoi(temp);
-            readInSaveWord(newWord, prev, wordFreq);   
+            readInSaveWord(newWord, prev, wordFreq);
         }
     }
     reader.close();
@@ -99,32 +120,12 @@ void Graph::saveToFile(string fileName){
     cin.ignore();
     getline(cin,des);
     writer << des;
-    saveHelper(root, writer);    
+    saveHelper(root, writer);
     cout << "The file is saved, Thanks!" << endl;
     writer.close();
     return;
 }
 
-
-//deals with finding the word, then adds a node if needed and calls createConnection
-void Graph::readInWord(string previous, string word){
-  //find them
-  Vertex* prev = findVertex(previous);
-  Vertex* wrd = findVertex(word);
-  
-
-  //if it doesn't exist
-  if(prev == nullptr){
-    prev = createWord(previous);
-  }
-  if(wrd == nullptr){
-    wrd = createWord(word);
-  }
-  
-  //cout << "Got to here" << endl;
-  createConnection(prev, wrd);
-  //cout << "Completed connections" << endl;
-}
 
 //prints all of the nodes and all of their connections
 void Graph::displayEdges(){
@@ -162,6 +163,37 @@ string Graph::predictWord(string word){
       return wrd->Edges[i].v->name;
     }
   }
+}
+
+
+//clean the word for direct insertion into the graph
+string Graph::cleanWord(string &word){
+  //remove punctuation from the end
+  while(ispunct(word[word.length() -1]))
+    word = word.substr(0, word.length() - 1);
+
+  //remove punctuation from the start
+  while(ispunct(word[0]))
+    word = word.substr(1);
+
+  //remove tabs
+  while(word[0] == '\t'){
+    word = word.substr(1);
+  }
+  while(word[word.length() - 1] == '\t'){
+    word = word.substr(0, word.length() - 1);
+  }
+
+  //make it lowercase
+  transform(word.begin(), word.end(), word.begin(), ::tolower);
+
+  return word;
+}
+
+
+//if the word is in the graph or not
+bool Graph::inGraph(string word){
+  return findVertex(word) != nullptr;
 }
 
 
@@ -258,7 +290,7 @@ Vertex* Graph::createWord(string word){
 void Graph::createConnection(Vertex* word1, Vertex* word2){
     int index = -1;
     //cout << "Here" << endl;
-    
+
       //cout << "Print true" << endl;
     //cout << "Edge " << word1->Edges.size();
 
@@ -297,7 +329,8 @@ void Graph::displayEdgesHelper(trieNode* root){
     cout << root->word->name << ": ";
     //print all of it's connections too
     for(int i = 0; i < root->word->Edges.size(); i++){
-      cout << root->word->Edges[i].v->name << " ";
+      cout << root->word->Edges[i].v->name << "(";
+      cout << root->word->Edges[i].frequency << ") ";
     }
     cout << endl;
   }
