@@ -16,17 +16,17 @@ Graph::~Graph(){
 
 
 //deals with finding the word, then adds a node if needed and calls createConnection
-void readInWord(string word, string previous){
+void Graph::readInWord(string word, string previous){
   //find them
-  vertex* wrd = findVertex(word);
-  vertex* prev = findVertex(previous);
+  Vertex* wrd = findVertex(word);
+  Vertex* prev = findVertex(previous);
 
   //if it doesn't exist
   if(wrd == NULL){
     wrd = createWord();
   }
 
-  createConnection(wrd, prev);
+  createConnection(prev, wrd);
 }
 
 //prints all of the nodes and all of their connections
@@ -36,9 +36,9 @@ void displayEdges(){
 
 
 //returns a word predicted from the word passed in
-string predictWord(string word){
+string Graph::predictWord(string word){
   //find the word
-  vertex* wrd = findVertex(word);
+  Vertex* wrd = findVertex(word);
 
   //make sure it exists
   if(wrd == NULL){
@@ -71,7 +71,7 @@ string predictWord(string word){
 //Private
 
 //recursively deletes the tree
-void deleteTrieHelper(trieNode*& root){
+void Graph::deleteTrieHelper(trieNode*& root){
   //loop through the next letters
   for(int i = 0; i < root->nextLetters.size(); i++){
     //delete the next letters
@@ -79,7 +79,7 @@ void deleteTrieHelper(trieNode*& root){
   }
 
   //delete the word
-  delete vertex;
+  delete root->v;
 
   //delete this
   delete root;
@@ -90,20 +90,20 @@ void deleteTrieHelper(trieNode*& root){
 
 
 //searches through the trie to find the vertex, returns NULL if not found
-vertex* findVertex(string word){
+Vertex* Graph::findVertex(string word){
   trieNode* trie = root;
 
   //go through the word
   while(word != ""){
     bool found = false;
     //find the next letter
-    for(int i = 0; i < root->nextLetters.size(); i++){
-      if(root->nextLetters[i]->character == word[0]){
+    for(int i = 0; i < trie->nextLetters.size(); i++){
+      if(trie->nextLetters[i]->character == word[0]){
         found = true;
         //shorten the word
         word = word.substr(1);
         //go to that node
-        root = root->nextLetters[i];
+        trie = trie->nextLetters[i];
         //break out of the for loop
         break;
       }
@@ -113,19 +113,65 @@ vertex* findVertex(string word){
       return NULL;
     }
   }
-  return root->word;
+  return trie->word;
 }
 
 //creates a new vertex with the word
-vertex* createWord(string word){
+Vertex* Graph::createWord(string word){
   //go through the trie
   trieNode* trie = root;
   string wordCopy = word;
 
+  //go through the word
+  while(word != ""){
+    bool found = false;
+    //find the next letter
+    for(int i = 0; i < trie->nextLetters.size(); i++){
+      if(root->nextLetters[i]->character == word[0]){
+        found = true;
+        //shorten the word
+        word = word.substr(1);
+        //go to that node
+        trie = trie->nextLetters[i];
+        //break out of the for loop
+        break;
+      }
+    }
+    //if they didn't find the letter
+    if( !found ){
+      //make a new node
+      trieNode* newLetter = new trieNode;
+      newLetter.character = word[0];
+      newLetter.word = NULL;
+      trie->nextLetters.push_back(newLetter);
+      //have it find it next time
+    }
+  }
+
+  //now that the word is empty, it means we are at the correct trie node
+  //create a new vertex here
+  trie->word = new Vertex;
+  trie->word->name = wordCopy;
 }
 
 
 //creates a connection or increases the count between the two words
-void createConnection(vertex* word1, vertex* word2);
+void Graph::createConnection(Vertex* word1, Vertex* word2);
+
+
 //recursively goes through the trie to display all of the vertices
-void displayEdgesHelper(trieNode* root);
+void Graph::displayEdgesHelper(trieNode* root){
+  //print this word if it exists
+  if( root->word != NULL){
+    cout << root->word->name << ": ";
+    //print all of it's connections too
+    for(int i = 0; i < root->word->Edges.size(); i++){
+      cout << root->word->Edges[i].v->name << " ";
+    }
+  }
+
+  //print all of its children
+  for(int i = 0; i < root->nextLetters.size(); i++){
+    displayEdgesHelper(root->nextLetters[i]);
+  }
+}
