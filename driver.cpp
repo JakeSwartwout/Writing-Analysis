@@ -7,7 +7,7 @@
 using namespace std;
 
 void printMenu();
-void printPairsOfWords(ifstream *fileReader);
+void printPairsOfWords(ifstream *fileReader, Graph *graph);
 string cleanWord(string word);
 
 int main(int argv, const char *argc[]){
@@ -25,6 +25,7 @@ int main(int argv, const char *argc[]){
         ifstream fileReader;
         string sInput;
         int iInput;
+        Graph graph;
         bool keepRunning = true;
         //Main While loop
         while(keepRunning){
@@ -39,8 +40,8 @@ int main(int argv, const char *argc[]){
                     fileReader.open(sInput);
                     if(!fileReader.fail()){
                         //Read pairs of words.
-                        printPairsOfWords(&fileReader);
-
+                        printPairsOfWords(&fileReader, &graph);
+                        graph.displayEdges();
                     }
                     else{
                         cout << "Filereader has failed, the text document name was spelled incorrecty or doesn't exist." << endl;
@@ -73,11 +74,12 @@ void printMenu(){
     cout << "||2. Some other Option||" << endl;
     cout << "||3. Quit             ||" << endl;
 }
-void printPairsOfWords(ifstream *fileReader){
+void printPairsOfWords(ifstream *fileReader, Graph *graph){
     string current, previous;
     getline(*fileReader, previous, ' ');
     while(getline(*fileReader, current, ' ')){
-        cout << cleanWord(previous) << " >> " << cleanWord(current) << endl;
+        //cout << cleanWord(previous) << " >> " << cleanWord(current) << endl;
+        (*graph).readInWord(cleanWord(previous), cleanWord(current));
         previous = current;
     }
     cout << "Printed all word combinations " << endl;
