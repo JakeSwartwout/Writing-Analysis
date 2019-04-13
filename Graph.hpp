@@ -34,8 +34,6 @@ class Graph
   public:
     Graph();
     ~Graph();
-    //recursively deletes the tree
-    void deleteTrieHelper(trieNode* root);
     //deals with finding the word, then adds a node if needed and calls createConnection
     void readInWord(string word, string previous);
     //prints all of the nodes and all of their connections
@@ -47,6 +45,8 @@ class Graph
     //the trie that holds all of the vertices
     trieNode* root;
 
+    //recursively deletes the tree
+    void deleteTrieHelper(trieNode* root);
     //searches through the trie to find the vertex
     vertex* findVertex(string word);
     //creates a new vertex with the word
