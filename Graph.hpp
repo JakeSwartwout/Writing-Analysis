@@ -2,6 +2,7 @@
 #define GRAPH_HPP
 
 #include <vector>
+#include <list>
 #include <iostream>
 
 struct vertex;
@@ -22,9 +23,11 @@ struct vertex
 };
 
 struct trieNode{
-  //a
-  trieNode* next[]
+  char character;
+  list<trieNode*> next;
+  vertex* word;
 };
+
 
 class Graph
 {
@@ -37,14 +40,13 @@ class Graph
     void displayEdges();
 
   private:
-    //the vertices in a list form, for easy looping
-    std::vector<vertex> vertices; //stores vertices
+    trieNode* root;
 
     vertex *findVertex(std::string name);
     //creates a new vertex with the word
     void addWord(string word);
     //creates a connection or increases the count between the two words
-    void createConnection(string word1, string word2); //maybe change these to vertex pointers?
+    void createConnection(vertex* word1, vertex* word2);
 
 };
 
