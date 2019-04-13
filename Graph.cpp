@@ -271,7 +271,7 @@ void Graph::createConnection(Vertex* word1, Vertex* word2){
         bool keepSort = true;
         for(int i = index - 1; i > -1 && index > -1; i--){
             if(word1->Edges[index].frequency > word1->Edges[i].frequency){
-                Edge temp = word1->Edges[index];
+                Edge temp = word1->Edges[index-1];
                 word1->Edges[i] = word1->Edges[index];
                 word1->Edges[index] = temp;
                 index--;
