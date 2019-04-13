@@ -14,6 +14,92 @@ Graph::~Graph(){
   deleteTrieHelper(root);
 }
 
+//
+void Graph::readInSaveWord(string word, string previous, int count){
+    vertex* wrd = findVertex(word);
+    vertex* prev = findVertex(previous);
+
+    if(wrd == NULL){
+    wrd = createWord(word);
+    }
+
+    Edge toBePushed;
+    toBePushed.frequency = count;
+    toBePushed.v = wrd;
+    prev->Edges.push_back(toBePushed);
+}
+
+//reads in entire saved file (calls read in save word function)
+void Graph::readInSaveFile(string fileName){
+    ifstream reader;
+    reader.open(fileName);
+    if (!reader.is_open()){
+        cout << "ERROR: File could not be opened." <<endl;
+        return;
+    }
+    string temp;
+    getline (reader, temp);
+    stringstream word;
+    cout << "The description for this saved file is: " << endl << temp << endl;
+    root = new trieNode;
+    string newWord;
+    string prev;
+    int wordFreq;
+    while (getline(reader, temp)){
+        word.str("");
+        word << temp;
+        temp.clear();
+        getline(word, temp,',');
+        prev = temp;
+        createWord(temp);
+        while (getline(word,temp,',')){
+            newWord = temp;
+            getline(word,temp,',');
+            wordFreq = stoi(temp);
+            readInSaveWord(newWord, prev, wordFreq);   
+        }
+    }
+    reader.close();
+    cout << "The save file was successfully accessed. Please continue." <<endl;
+}
+//writes the graph to a file
+
+void saveHelper(trieNode* node, ofstream &writer){
+    if (node==NULL){
+        return;
+    }
+    //if node points to a word, save that into new line on file then save edge list; (if edge list is empty?)
+    if (node->word!=NULL){
+        writer << "\n" << node->word << ",";
+        int tempSize = node->word->Edges.size();
+        for (int i=0; i< tempSize; i++){
+            writer << node->word->Edges[i].v->name << "," << node->word->Edges[i].frequency << ",";
+        }
+    }
+    int size = node->nextLetters.size();
+    for (int i=0; i<size; i++){
+        saveHelper(node->nextLetters[i], writer);
+    }
+}
+
+
+void Graph::saveToFile(string fileName){
+    ofstream writer;
+    writer.open(fileName);
+    if (!writer.is_open()){
+        cout << "ERROR: File did not open. Cannot save." << endl;
+        return;
+    }
+    cout << "Please create a short description of this file: " << endl;
+    string des;
+    cin.ignore();
+    getline(cin,des);
+    writer << des;
+    saveHelper(root, writer);    
+    cout << "The file is saved, Thanks!" << endl;
+    writer.close();
+    return;
+}
 
 //deals with finding the word, then adds a node if needed and calls createConnection
 void Graph::readInWord(string word, string previous){
