@@ -46,7 +46,7 @@ class Graph
     trieNode* root;
 
     //recursively deletes the tree
-    void deleteTrieHelper(trieNode* root);
+    void deleteTrieHelper(trieNode*& root);
     //searches through the trie to find the vertex
     vertex* findVertex(string word);
     //creates a new vertex with the word
