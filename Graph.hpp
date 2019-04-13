@@ -35,6 +35,8 @@ class Graph
     ~Graph();
     //deals with finding the word, then adds a node if needed and calls createConnection
     void readInWord(string word, string previous);
+    //exactly the same as readInWord, except that it increments it by a count, rather than by 1
+    void readInSave(string word, string previous, int count);
     //prints all of the nodes and all of their connections
     void displayEdges();
     //returns a word predicted from the word passed in
