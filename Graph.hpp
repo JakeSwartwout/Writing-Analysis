@@ -12,7 +12,7 @@ vertex in the graph. */
 struct Edge
 {
     vertex *v;
-    int distance;
+    int frequency;
 };
 
 /*this is the struct for each vertex in the graph. */
@@ -24,7 +24,7 @@ struct vertex
 
 struct trieNode{
   char character;
-  list<trieNode*> next;
+  list<trieNode*> nextLetters;
   vertex* word;
 };
 
@@ -34,20 +34,23 @@ class Graph
   public:
     Graph();
     ~Graph();
-    //either increases the word's frequency or creates a new one and connects it
+    //deals with finding the word, then adds a node if needed and calls createConnection
     void readInWord(string word, string previous);
     //prints all of the nodes and all of their connections
     void displayEdges();
+    //returns a word predicted from the word passed in
+    string predictWord(string word);
 
   private:
+    //the trie that holds all of the vertices
     trieNode* root;
 
-    vertex *findVertex(std::string name);
+    //searches through the trie to find the vertex
+    vertex* findVertex(string word);
     //creates a new vertex with the word
-    void addWord(string word);
+    void createWord(string word);
     //creates a connection or increases the count between the two words
     void createConnection(vertex* word1, vertex* word2);
-
 };
 
 #endif // GRAPH_HPP
