@@ -36,7 +36,9 @@ class Graph
     //deals with finding the word, then adds a node if needed and calls createConnection
     void readInWord(string word, string previous);
     //exactly the same as readInWord, except that it increments it by a count, rather than by 1
-    void readInSave(string word, string previous, int count);
+    void readInSaveWord(string word, string previous, int count);
+    //reads in entire saved file (calls read in save word function)
+    void readInSaveFile(string word, string previous, int count);
     //writes the graph to a file
     void saveToFile(string fileName);
     //prints all of the nodes and all of their connections
