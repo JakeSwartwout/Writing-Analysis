@@ -127,7 +127,7 @@ Vertex* Graph::createWord(string word){
     bool found = false;
     //find the next letter
     for(int i = 0; i < trie->nextLetters.size(); i++){
-      if(root->nextLetters[i]->character == word[0]){
+      if(trie->nextLetters[i]->character == word[0]){
         found = true;
         //shorten the word
         word = word.substr(1);
