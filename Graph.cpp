@@ -156,7 +156,33 @@ Vertex* Graph::createWord(string word){
 
 
 //creates a connection or increases the count between the two words
-void Graph::createConnection(Vertex* word1, Vertex* word2);
+void Graph::createConnection(Vertex* word1, Vertex* word2){
+    int index = -1;
+    for(int i = 0; i < word1->Edges.size(); i++){
+        if(word1->Edges[i].v == word2)
+            index = i;
+    }
+    if(index >= 0){
+        word1->Edges[index].frequency ++;
+        bool keepSort = true;
+        for(int i = index - 1; i > -1 && index > -1; i--){
+            if(word1->Edges[index].frequency > word1->Edges[i].frequency){
+                Edge temp = word1->Edges[index];
+                word1->Edges[i] = word1->Edges[index];
+                word1->Edges[index] = temp;
+                index--;
+            }
+            else
+                i = -1;
+        }
+    }
+    else{
+        Edge toBePushed;
+        toBePushed.frequency = 1;
+        toBePushed.v = word2;
+        word1->Edges.push_back(toBePushed);
+    }
+}
 
 
 //recursively goes through the trie to display all of the vertices
