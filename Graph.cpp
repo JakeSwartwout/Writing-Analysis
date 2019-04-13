@@ -7,11 +7,11 @@ using namespace std;
 
 
 Graph::Graph(){
-  root = NULL;
+  root = nullptr;
 }
 
 Graph::~Graph(){
-  deleteTrieHelper(trieNode* root);
+  deleteTrieHelper(root);
 }
 
 
@@ -22,15 +22,15 @@ void Graph::readInWord(string word, string previous){
   Vertex* prev = findVertex(previous);
 
   //if it doesn't exist
-  if(wrd == NULL){
-    wrd = createWord();
+  if(wrd == nullptr){
+    wrd = createWord(word);
   }
 
   createConnection(prev, wrd);
 }
 
 //prints all of the nodes and all of their connections
-void displayEdges(){
+void Graph::displayEdges(){
   displayEdgesHelper(root);
 }
 
@@ -41,7 +41,7 @@ string Graph::predictWord(string word){
   Vertex* wrd = findVertex(word);
 
   //make sure it exists
-  if(wrd == NULL){
+  if(wrd == nullptr){
     cout << "Word does not exist!" << endl;
     return "ERROR";
   }
@@ -58,7 +58,7 @@ string Graph::predictWord(string word){
   //go find it
   for(int i = 0; i < wrd->Edges.size(); i++){
     //count down
-    choice -= wrd->Edges[i].frenquency;
+    choice -= wrd->Edges[i].frequency;
     //until you reach the choice
     if(choice <= 0){
       return wrd->Edges[i].v->name;
@@ -79,17 +79,17 @@ void Graph::deleteTrieHelper(trieNode*& root){
   }
 
   //delete the word
-  delete root->v;
+  delete root->word;
 
   //delete this
   delete root;
 
   //now its null
-  root = NULL;
+  root = nullptr;
 }
 
 
-//searches through the trie to find the vertex, returns NULL if not found
+//searches through the trie to find the vertex, returns nullptr if not found
 Vertex* Graph::findVertex(string word){
   trieNode* trie = root;
 
@@ -110,7 +110,7 @@ Vertex* Graph::findVertex(string word){
     }
     //if they didn't find the letter
     if( !found ){
-      return NULL;
+      return nullptr;
     }
   }
   return trie->word;
@@ -141,8 +141,8 @@ Vertex* Graph::createWord(string word){
     if( !found ){
       //make a new node
       trieNode* newLetter = new trieNode;
-      newLetter.character = word[0];
-      newLetter.word = NULL;
+      newLetter->character = word[0];
+      newLetter->word = nullptr;
       trie->nextLetters.push_back(newLetter);
       //have it find it next time
     }
@@ -188,7 +188,7 @@ void Graph::createConnection(Vertex* word1, Vertex* word2){
 //recursively goes through the trie to display all of the vertices
 void Graph::displayEdgesHelper(trieNode* root){
   //print this word if it exists
-  if( root->word != NULL){
+  if( root->word != nullptr){
     cout << root->word->name << ": ";
     //print all of it's connections too
     for(int i = 0; i < root->word->Edges.size(); i++){
