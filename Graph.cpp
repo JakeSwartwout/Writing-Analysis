@@ -73,7 +73,7 @@ void saveHelper(trieNode* node, ofstream &writer){
     }
     //if node points to a word, save that into new line on file then save edge list; (if edge list is empty?)
     if (node->word!=NULL){
-        writer << "\n" << node->word << ",";
+        writer << "\n" << node->word->name << ",";
         int tempSize = node->word->Edges.size();
         for (int i=0; i< tempSize; i++){
             writer << node->word->Edges[i].v->name << "," << node->word->Edges[i].frequency << ",";
