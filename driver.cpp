@@ -55,7 +55,8 @@ int main(){
       case 4: //display current data
           graph.displayEdges();
           break;
-      case 5: //make prediction
+      case 5: //make random prediction
+          cout << "Using probability to predict the next word" << endl;
           cout << "What word would you like to start with?" << endl;
           cin >> sInput;
           graph.cleanWord(sInput);
@@ -80,7 +81,59 @@ int main(){
           } while(dataSave == "");
           cout << endl;
           break;
-      case 6: //quit
+      case 6: //predict the most common
+          cout << "Predicting the most common word:" << endl;
+          cout << "What word would you like to start with?" << endl;
+          cin >> sInput;
+          graph.cleanWord(sInput);
+          //make sure it is in the graph
+          while( !graph.inGraph(sInput) ){
+            cout << "That word isn't in the graph, try again" << endl;
+            cin >> sInput;
+            graph.cleanWord(sInput);
+          }
+          //clear cin
+          cin.ignore();
+          //tell the user how it works
+          cout << "Hit enter to generate another word." << endl;
+          cout << "Press any other key and then enter to exit" << endl;
+          cout << sInput << endl;
+          //loop to print the words
+          do{
+            sInput = graph.predictBestWord(sInput);
+            cout << sInput;
+            //just to have them enter anything
+            getline(cin, dataSave);
+          } while(dataSave == "");
+          cout << endl;
+          break;
+      case 7: //predict the least common
+          cout << "Predicting the least common word:" << endl;
+          cout << "What word would you like to start with?" << endl;
+          cin >> sInput;
+          graph.cleanWord(sInput);
+          //make sure it is in the graph
+          while( !graph.inGraph(sInput) ){
+            cout << "That word isn't in the graph, try again" << endl;
+            cin >> sInput;
+            graph.cleanWord(sInput);
+          }
+          //clear cin
+          cin.ignore();
+          //tell the user how it works
+          cout << "Hit enter to generate another word." << endl;
+          cout << "Press any other key and then enter to exit" << endl;
+          cout << sInput << endl;
+          //loop to print the words
+          do{
+            sInput = graph.predictWorstWord(sInput);
+            cout << sInput;
+            //just to have them enter anything
+            getline(cin, dataSave);
+          } while(dataSave == "");
+          cout << endl;
+          break;
+      case 8: //quit
           cout << "Goodbye! " << endl;
           keepRunning = false;
           break;
@@ -93,12 +146,14 @@ int main(){
 }
 
 void printMenu(){
-    cout << "||1. Read in file        ||" << endl;
-    cout << "||2. Open Saved data     ||" << endl;
-    cout << "||3. Save current data   ||" << endl;
-    cout << "||4. Display current data||" << endl;
-    cout << "||5. Make prediction     ||" << endl;
-    cout << "||6. Quit                ||" << endl;
+    cout << "||1. Read in file          ||" << endl;
+    cout << "||2. Open Saved data       ||" << endl;
+    cout << "||3. Save current data     ||" << endl;
+    cout << "||4. Display current data  ||" << endl;
+    cout << "||5. Make random prediction||" << endl;
+    cout << "||6. Predict most common   ||" << endl;
+    cout << "||7. Predict least common  ||" << endl;
+    cout << "||8. Quit                  ||" << endl;
 }
 
 //take an open file reader and graph and read everything into the graph

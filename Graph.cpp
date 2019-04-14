@@ -192,6 +192,50 @@ string Graph::predictWord(string word){
 }
 
 
+//returns the most common word after the input
+string Graph::predictBestWord(string word){
+  //find the word
+  Vertex* wrd = findVertex(word);
+
+  //make sure it exists
+  if(wrd == nullptr){
+    cout << "Word does not exist!" << endl;
+    return "ERROR";
+  }
+
+  //sum the total connections
+  int totalConnections = 0;
+  for(int i = 0; i < wrd->Edges.size(); i++){
+    totalConnections += wrd->Edges[i].frequency;
+  }
+
+  //pick the best
+  return wrd->Edges[0].v->name;
+}
+
+
+//returns the least common word after the input
+string Graph::predictWorstWord(string word){
+  //find the word
+  Vertex* wrd = findVertex(word);
+
+  //make sure it exists
+  if(wrd == nullptr){
+    cout << "Word does not exist!" << endl;
+    return "ERROR";
+  }
+
+  //sum the total connections
+  int totalConnections = 0;
+  for(int i = 0; i < wrd->Edges.size(); i++){
+    totalConnections += wrd->Edges[i].frequency;
+  }
+
+  //pick the best
+  return wrd->Edges[wrd->Edges.size() - 1].v->name;
+}
+
+
 //clean the word for direct insertion into the graph
 string Graph::cleanWord(string &word){
   //remove tabs before

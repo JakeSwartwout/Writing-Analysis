@@ -45,8 +45,12 @@ class Graph
     void saveToFile(string fileName);
     //prints all of the nodes and all of their connections
     void displayEdges();
-    //returns a word predicted from the word passed in
+    //returns a word predicted from the word passed in, using probability
     string predictWord(string word);
+    //returns the most common word after the input
+    string predictBestWord(string word);
+    //returns the least common word after the input
+    string predictWorstWord(string word);
     //clean the word for direct insertion into the graph
     string cleanWord(string &word);
     //if the word is in the graph or not
