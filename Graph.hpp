@@ -36,7 +36,8 @@ class Graph
     ~Graph();
     //deals with finding the word, then adds a node if needed and calls createConnection
     void readInWord(string previous, string word);
-    //exactly the same as readInWord, except that it increments it by a count, rather than by 1
+    //just like readInWord, but for save words.
+    //creates a new node if previous is not found
     void readInSaveWord(string previous, string word, int count);
     //reads in entire saved file (calls read in save word function)
     void readInSaveFile(string fileName);

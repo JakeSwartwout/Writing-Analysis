@@ -58,10 +58,12 @@ int main(){
       case 5: //make prediction
           cout << "What word would you like to start with?" << endl;
           cin >> sInput;
+          graph.cleanWord(sInput);
           //make sure it is in the graph
           while( !graph.inGraph(sInput) ){
             cout << "That word isn't in the graph, try again" << endl;
             cin >> sInput;
+            graph.cleanWord(sInput);
           }
           //clear cin
           cin.ignore();
