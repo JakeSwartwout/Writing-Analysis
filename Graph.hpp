@@ -63,9 +63,11 @@ class Graph
     //creates a new Vertex with the word
     Vertex* createWord(string word);
     //creates a connection or increases the count between the two words
-    void createConnection(Vertex* fromWord, Vertex* toWord);
+    void createConnection(Vertex* fromWord, Vertex* toWord, int frequency);
     //recursively goes through the trie to display all of the vertices
     void displayEdgesHelper(trieNode* root);
+    //helps recursively traverse the tree to print to a file
+    void saveHelper(trieNode* node, ofstream &writer);
 };
 
 #endif // GRAPH_HPP

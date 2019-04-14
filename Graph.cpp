@@ -26,17 +26,17 @@ void Graph::readInWord(string previous, string word){
   Vertex* wrd = findVertex(word);
 
 
-  //if it doesn't exist
+  //if it's the first word
   if(prev == nullptr){
-    prev = createWord(previous);
+    prev = root->word;
   }
+  //if it hasn't been read yet
   if(wrd == nullptr){
     wrd = createWord(word);
   }
 
-  //cout << "Got to here" << endl;
-  createConnection(prev, wrd);
-  //cout << "Completed connections" << endl;
+  //create or increase the connection by 1
+  createConnection(prev, wrd, 1);
 }
 
 //readInWord, but from the save file (known frequency number)
@@ -44,14 +44,11 @@ void Graph::readInSaveWord(string previous, string word, int count){
     Vertex* wrd = findVertex(word);
     Vertex* prev = findVertex(previous);
 
-    if(wrd == NULL){
+    if(wrd == nullptr){
     wrd = createWord(word);
     }
 
-    Edge toBePushed;
-    toBePushed.frequency = count;
-    toBePushed.v = wrd;
-    prev->Edges.push_back(toBePushed);
+    createConnection(prev, wrd, count);
 }
 
 //reads in entire saved file (calls read in save word function)
@@ -87,14 +84,13 @@ void Graph::readInSaveFile(string fileName){
     reader.close();
     cout << "The save file was successfully accessed. Please continue." <<endl;
 }
-//writes the graph to a file
 
-void saveHelper(trieNode* node, ofstream &writer){
-    if (node==NULL){
+void Graph::saveHelper(trieNode* node, ofstream &writer){
+    if (node == nullptr){
         return;
     }
     //if node points to a word, save that into new line on file then save edge list; (if edge list is empty?)
-    if (node->word!=NULL){
+    if (node->word != nullptr){
         writer << "\n" << node->word->name << ",";
         int tempSize = node->word->Edges.size();
         for (int i=0; i< tempSize; i++){
@@ -108,6 +104,7 @@ void saveHelper(trieNode* node, ofstream &writer){
 }
 
 
+//writes the graph to a file
 void Graph::saveToFile(string fileName){
     ofstream writer;
     writer.open(fileName);
@@ -129,8 +126,9 @@ void Graph::saveToFile(string fileName){
 
 //prints all of the nodes and all of their connections
 void Graph::displayEdges(){
-  for(int i = 0; i < root->nextLetters.size(); i++)
-    displayEdgesHelper(root->nextLetters[i]);
+  //for(int i = 0; i < root->nextLetters.size(); i++)
+    //displayEdgesHelper(root->nextLetters[i]);
+  displayEdgesHelper(root);
 }
 
 
@@ -168,21 +166,22 @@ string Graph::predictWord(string word){
 
 //clean the word for direct insertion into the graph
 string Graph::cleanWord(string &word){
-  //remove punctuation from the end
-  while(ispunct(word[word.length() -1]))
+  //remove tabs before
+  while(word[0] == '\t'){
+    word = word.substr(1);
+  }
+  //tab from the end
+  while(word[word.length() - 1] == '\t'){
     word = word.substr(0, word.length() - 1);
+  }
 
   //remove punctuation from the start
   while(ispunct(word[0]))
     word = word.substr(1);
 
-  //remove tabs
-  while(word[0] == '\t'){
-    word = word.substr(1);
-  }
-  while(word[word.length() - 1] == '\t'){
+  //remove punctuation from the end
+  while(ispunct(word[word.length() -1]))
     word = word.substr(0, word.length() - 1);
-  }
 
   //make it lowercase
   transform(word.begin(), word.end(), word.begin(), ::tolower);
@@ -287,43 +286,49 @@ Vertex* Graph::createWord(string word){
 
 
 //creates a connection or increases the count between the two words
-void Graph::createConnection(Vertex* word1, Vertex* word2){
-    int index = -1;
-    //cout << "Here" << endl;
+void Graph::createConnection(Vertex* word1, Vertex* word2, int frequency){
 
-      //cout << "Print true" << endl;
-    //cout << "Edge " << word1->Edges.size();
-
-    for(int i = 0; i < word1->Edges.size(); i++){
-        if(word1->Edges[i].v == word2)
-            index = i;
+    int index;
+    //look for the word
+    for(index = 0; index < word1->Edges.size(); index++){
+        if(word1->Edges[index].v == word2)
+            break;
     }
-    //cout << "Hello" << endl;
-    if(index >= 0){
+
+    //if we found it
+    if(index < word1->Edges.size()){
+        //increase its frequency
         word1->Edges[index].frequency ++;
-        bool keepSort = true;
-        for(int i = index - 1; i > -1 && index > -1; i--){
-            if(word1->Edges[index].frequency > word1->Edges[i].frequency){
-                Edge temp = word1->Edges[index-1];
-                word1->Edges[i] = word1->Edges[index];
-                word1->Edges[index] = temp;
-                index--;
-            }
-            else
-                i = -1;
-        }
     }
+    //otherwise, add a new word
     else{
         Edge toBePushed;
-        toBePushed.frequency = 1;
+        toBePushed.frequency = frequency;
         toBePushed.v = word2;
         word1->Edges.push_back(toBePushed);
+    }
+
+    //sort it up the list
+    for(int i = index - 1; i > -1 && index > -1; i--){
+        //if a swap is needed
+        if(word1->Edges[index].frequency > word1->Edges[i].frequency){
+            Edge temp = word1->Edges[index-1];
+            word1->Edges[i] = word1->Edges[index];
+            word1->Edges[index] = temp;
+            index--;
+        }
+        //otherwise, quit
+        else
+            break;
     }
 }
 
 
 //recursively goes through the trie to display all of the vertices
 void Graph::displayEdgesHelper(trieNode* root){
+  //do not need a base case, since will only print
+  //existing children
+
   //print this word if it exists
   if( root->word != nullptr){
     cout << root->word->name << ": ";
@@ -339,5 +344,4 @@ void Graph::displayEdgesHelper(trieNode* root){
   for(int i = 0; i < root->nextLetters.size(); i++){
     displayEdgesHelper(root->nextLetters[i]);
   }
-  //cout << endl;
 }
