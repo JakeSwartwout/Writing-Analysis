@@ -267,26 +267,43 @@ bool Graph::inGraph(string word){
   return findVertex(word) != nullptr;
 }
 
+//prints the information for the single word
+void Graph::printEdges(string word){
+  Vertex* node = findVertex(word);
+
+  //print this word if it exists
+  if( node != nullptr){
+    cout << node->name << ": ";
+    //print all of it's connections too
+    for(int i = 0; i < node->Edges.size(); i++){
+      cout << node->Edges[i].v->name << "(";
+      cout << node->Edges[i].frequency << ") ";
+    }
+    cout << endl;
+  }
+}
+
+
 
 
 //Private
 
 //recursively deletes the tree
-void Graph::deleteTrieHelper(trieNode*& root){
+void Graph::deleteTrieHelper(trieNode*& node){
   //loop through the next letters
-  for(int i = 0; i < root->nextLetters.size(); i++){
+  for(int i = 0; i < node->nextLetters.size(); i++){
     //delete the next letters
-    deleteTrieHelper(root->nextLetters[i]);
+    deleteTrieHelper(node->nextLetters[i]);
   }
 
   //delete the word
-  delete root->word;
+  delete node->word;
 
   //delete this
-  delete root;
+  delete node;
 
   //now its null
-  root = nullptr;
+  node = nullptr;
 }
 
 
@@ -397,23 +414,23 @@ void Graph::createConnection(Vertex* word1, Vertex* word2, int frequency){
 
 
 //recursively goes through the trie to display all of the vertices
-void Graph::displayEdgesHelper(trieNode* root){
+void Graph::displayEdgesHelper(trieNode* node){
   //do not need a base case, since will only print
   //existing children
 
   //print this word if it exists
-  if( root->word != nullptr){
-    cout << root->word->name << ": ";
+  if( node->word != nullptr){
+    cout << node->word->name << ": ";
     //print all of it's connections too
-    for(int i = 0; i < root->word->Edges.size(); i++){
-      cout << root->word->Edges[i].v->name << "(";
-      cout << root->word->Edges[i].frequency << ") ";
+    for(int i = 0; i < node->word->Edges.size(); i++){
+      cout << node->word->Edges[i].v->name << "(";
+      cout << node->word->Edges[i].frequency << ") ";
     }
     cout << endl;
   }
 
   //print all of its children
-  for(int i = 0; i < root->nextLetters.size(); i++){
-    displayEdgesHelper(root->nextLetters[i]);
+  for(int i = 0; i < node->nextLetters.size(); i++){
+    displayEdgesHelper(node->nextLetters[i]);
   }
 }

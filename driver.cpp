@@ -133,11 +133,23 @@ int main(){
           } while(dataSave == "");
           cout << endl;
           break;
-      case 8: //quit
+      case 8: //investigate word
+          cout << "Investigating a single word:" << endl;
+          cout << "Which word would you like to learn about?" << endl;
+          cin >> sInput;
+          graph.cleanWord(sInput);
+          //make sure it is in the graph
+          while( !graph.inGraph(sInput) ){
+            cout << "That word isn't in the graph, try again" << endl;
+            cin >> sInput;
+            graph.cleanWord(sInput);
+          }
+          graph.printEdges(sInput);
+          break;
+      case 9: //quit
           cout << "Goodbye! " << endl;
           keepRunning = false;
           break;
-
       default:
           cout << "Please enter a number for your selection." << endl;
           break;
@@ -153,7 +165,8 @@ void printMenu(){
     cout << "||5. Make random prediction||" << endl;
     cout << "||6. Predict most common   ||" << endl;
     cout << "||7. Predict least common  ||" << endl;
-    cout << "||8. Quit                  ||" << endl;
+    cout << "||8. Investigate word      ||" << endl;
+    cout << "||9. Quit                  ||" << endl;
 }
 
 //take an open file reader and graph and read everything into the graph

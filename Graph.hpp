@@ -55,6 +55,8 @@ class Graph
     string cleanWord(string &word);
     //if the word is in the graph or not
     bool inGraph(string word);
+    //prints the information for the single
+    void printEdges(string word);
 
 
   private:
