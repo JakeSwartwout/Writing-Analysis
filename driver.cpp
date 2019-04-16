@@ -20,7 +20,6 @@ int main(){
   string sInput;
   string dataSave;
   int iInput;
-  int tries;
   Graph graph;
   bool keepRunning = true;
   //Main While loop
