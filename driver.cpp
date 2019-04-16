@@ -20,17 +20,18 @@ int main(){
   string sInput;
   string dataSave;
   int iInput;
+  int tries;
   Graph graph;
   bool keepRunning = true;
   //Main While loop
   while(keepRunning){
     printMenu();
     cin >> iInput;
+    cin.ignore();
     switch (iInput){
       case 1://read in file
           cout << "Enter the file name you would like me to look at." << endl;
           cin >> sInput;
-          cin.ignore();
           fileReader.open(sInput);
           if(!fileReader.fail()){
               //Read pairs of words.
@@ -58,16 +59,11 @@ int main(){
       case 5: //make random prediction
           cout << "Using probability to predict the next word" << endl;
           cout << "What word would you like to start with?" << endl;
-          cin >> sInput;
-          graph.cleanWord(sInput);
-          //make sure it is in the graph
-          while( !graph.inGraph(sInput) ){
-            cout << "That word isn't in the graph, try again" << endl;
-            cin >> sInput;
-            graph.cleanWord(sInput);
-          }
-          //clear cin
           cin.ignore();
+          sInput = graph.promptWord();
+          if(sInput == ""){
+            break;
+          }
           //tell the user how it works
           cout << "Hit enter to generate another word." << endl;
           cout << "Press any other key and then enter to exit" << endl;
@@ -83,17 +79,11 @@ int main(){
           break;
       case 6: //predict the most common
           cout << "Predicting the most common word:" << endl;
-          cout << "What word would you like to start with?" << endl;
-          cin >> sInput;
-          graph.cleanWord(sInput);
-          //make sure it is in the graph
-          while( !graph.inGraph(sInput) ){
-            cout << "That word isn't in the graph, try again" << endl;
-            cin >> sInput;
-            graph.cleanWord(sInput);
-          }
-          //clear cin
           cin.ignore();
+          sInput = graph.promptWord();
+          if(sInput == ""){
+            break;
+          }
           //tell the user how it works
           cout << "Hit enter to generate another word." << endl;
           cout << "Press any other key and then enter to exit" << endl;
@@ -109,17 +99,11 @@ int main(){
           break;
       case 7: //predict the least common
           cout << "Predicting the least common word:" << endl;
-          cout << "What word would you like to start with?" << endl;
-          cin >> sInput;
-          graph.cleanWord(sInput);
-          //make sure it is in the graph
-          while( !graph.inGraph(sInput) ){
-            cout << "That word isn't in the graph, try again" << endl;
-            cin >> sInput;
-            graph.cleanWord(sInput);
-          }
-          //clear cin
           cin.ignore();
+          sInput = graph.promptWord();
+          if(sInput == ""){
+            break;
+          }
           //tell the user how it works
           cout << "Hit enter to generate another word." << endl;
           cout << "Press any other key and then enter to exit" << endl;
@@ -136,15 +120,11 @@ int main(){
       case 8: //investigate word
           cout << "Investigating a single word:" << endl;
           cout << "Which word would you like to learn about?" << endl;
-          cin >> sInput;
-          graph.cleanWord(sInput);
-          //make sure it is in the graph
-          while( !graph.inGraph(sInput) ){
-            cout << "That word isn't in the graph, try again" << endl;
-            cin >> sInput;
-            graph.cleanWord(sInput);
+          cin.ignore();
+          sInput = graph.promptWord();
+          if(sInput != ""){
+            graph.printEdges(sInput);
           }
-          graph.printEdges(sInput);
           break;
       case 9: //quit
           cout << "Goodbye! " << endl;

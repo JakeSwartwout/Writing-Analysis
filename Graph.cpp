@@ -42,25 +42,18 @@ void Graph::readInWord(string previous, string word){
 
 //just like readInWord, but for save words.
 //creates a new node if previous is not found
-void Graph::readInSaveWord(string previous, string word, int count){
-  cout << "Reading in save word \'" << previous << "\' and \'" << word << "\' at \'" << count << "\'" << endl;
-
-  //find them
-  Vertex* prev = findVertex(previous);
+void Graph::readInSaveWord(Vertex* previous, string word, int count){
+  //find it
   Vertex* wrd = findVertex(word);
 
 
-  //if it's the first word
-  if(prev == nullptr){
-    prev = createWord(word);
-  }
   //if it hasn't been read yet
   if(wrd == nullptr){
     wrd = createWord(word);
   }
 
   //create or increase the connection by 1
-  createConnection(prev, wrd, count);
+  createConnection(previous, wrd, count);
 }
 
 //reads in entire saved file (calls read in save word function)
@@ -81,15 +74,17 @@ void Graph::readInSaveFile(string fileName){
 
     //start reading in
     string newWord;
-    string prev;
+    Vertex* prev;
     int wordFreq;
     while (getline(reader, temp)){
-        cout << "the line is " << "\"" << temp << "\"" << endl;
         word.clear();
         word << temp;
         //get the word
         getline(word, temp, ':');
-        prev = temp;
+        prev = findVertex(temp);
+        if(prev == nullptr){
+          prev = createWord(temp);
+        }
         //read in the connections
         while(getline(word,temp,'*')){ //first just the word
             newWord = temp;
@@ -281,6 +276,26 @@ void Graph::printEdges(string word){
     }
     cout << endl;
   }
+}
+
+//continues prompting to get a valid word
+string Graph::promptWord(){
+  string sInput;
+  cout << "What word would you like to start with?" << endl;
+  getline(cin, sInput);
+  cleanWord(sInput);
+  //make sure it is in the graph
+  int tries = 5;
+  while( !inGraph(sInput) && tries > 0){
+    cout << "That word isn't in the graph, " << tries << " more tries" << endl;
+    getline(cin, sInput);
+    cleanWord(sInput);
+    tries --;
+  }
+  if(tries == 0){
+    return "";
+  }
+  return sInput;
 }
 
 

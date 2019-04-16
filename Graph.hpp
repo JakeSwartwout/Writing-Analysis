@@ -36,9 +36,6 @@ class Graph
     ~Graph();
     //deals with finding the word, then adds a node if needed and calls createConnection
     void readInWord(string previous, string word);
-    //just like readInWord, but for save words.
-    //creates a new node if previous is not found
-    void readInSaveWord(string previous, string word, int count);
     //reads in entire saved file (calls read in save word function)
     void readInSaveFile(string fileName);
     //writes the graph to a file
@@ -57,12 +54,17 @@ class Graph
     bool inGraph(string word);
     //prints the information for the single
     void printEdges(string word);
+    //continues prompting for a valid word
+    string promptWord();
 
 
   private:
     //the trie that holds all of the vertices
     trieNode* root;
 
+    //just like readInWord, but for save words.
+    //creates a new node if previous is not found
+    void readInSaveWord(Vertex* previous, string word, int count);
     //recursively deletes the tree
     void deleteTrieHelper(trieNode*& root);
     //searches through the trie to find the Vertex, returns nullptr if not found
