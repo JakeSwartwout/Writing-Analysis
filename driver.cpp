@@ -31,7 +31,7 @@ int main(){
       case 1://read in file
           cout << "Enter the file name you would like me to look at." << endl;
           cin >> sInput;
-          fileReader.open(sInput);
+          fileReader.open("Writing Samples\\" + sInput);
           if(!fileReader.fail()){
               //Read pairs of words.
               readInFile(fileReader, graph);
@@ -45,20 +45,19 @@ int main(){
       case 2: //open saved data
           cout << "Enter the name of the saved data file that you would like me to retrieve." <<endl;
           cin >> dataSave;
-          graph.readInSaveFile(dataSave);
+          graph.readInSaveFile("Save Files\\" + dataSave);
           break;
       case 3: //save current data
           cout << "Enter the name of the data file that you would like me to save your current session in." <<endl;
-          cin >> dataSave;
-          graph.saveToFile(dataSave);
+          cin.ignore();
+          getline(cin, dataSave);
+          graph.saveToFile("Save Files\\" + dataSave);
           break;
       case 4: //display current data
           graph.displayEdges();
           break;
       case 5: //make random prediction
           cout << "Using probability to predict the next word" << endl;
-          cout << "What word would you like to start with?" << endl;
-          cin.ignore();
           sInput = graph.promptWord();
           if(sInput == ""){
             break;
@@ -78,7 +77,6 @@ int main(){
           break;
       case 6: //predict the most common
           cout << "Predicting the most common word:" << endl;
-          cin.ignore();
           sInput = graph.promptWord();
           if(sInput == ""){
             break;
@@ -98,7 +96,6 @@ int main(){
           break;
       case 7: //predict the least common
           cout << "Predicting the least common word:" << endl;
-          cin.ignore();
           sInput = graph.promptWord();
           if(sInput == ""){
             break;
@@ -119,7 +116,6 @@ int main(){
       case 8: //investigate word
           cout << "Investigating a single word:" << endl;
           cout << "Which word would you like to learn about?" << endl;
-          cin.ignore();
           sInput = graph.promptWord();
           if(sInput != ""){
             graph.printEdges(sInput);

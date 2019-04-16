@@ -281,7 +281,7 @@ void Graph::printEdges(string word){
 //continues prompting to get a valid word
 string Graph::promptWord(){
   string sInput;
-  cout << "What word would you like to start with?" << endl;
+  cout << "Please enter a word:" << endl;
   getline(cin, sInput);
   cleanWord(sInput);
   //make sure it is in the graph
