@@ -8,4 +8,4 @@ Dorothea: All save functionality
 
 Spas: Entire driver file, clean function (to remove punctuation and capitalization), and addConnection function
 
-Jake: Rough .hpp file, and most of the basic functions in graph.cpp
+Jake: Rough .hpp file, some of the basic functions in graph.cpp, lots of debugging
