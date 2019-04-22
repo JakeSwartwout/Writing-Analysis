@@ -19,41 +19,42 @@ Graph::~Graph(){
   deleteTrieHelper(root);
 }
 
-//deals with finding the word, then adds a node if needed and calls createConnection
-//assumes the previous is START if not found
-void Graph::readInWord(string previous, string word){
-  //find them
-  Vertex* prev = findVertex(previous);
-  Vertex* wrd = findVertex(word);
+void Graph::readInFile(ifstream &fileReader){
+    string current, previous;
+    //get the first word
+    getline(fileReader, previous, ' ');
+    //clean it
+    cleanWord(previous);
+    //link it to the start
+    readInWord("START", previous);
 
+    //prep to string stream
+    stringstream ss;
+    string line;
 
-  //if it's the first word
-  if(prev == nullptr){
-    prev = root->word;
-  }
-  //if it hasn't been read yet
-  if(wrd == nullptr){
-    wrd = createWord(word);
-  }
-
-  //create or increase the connection by 1
-  createConnection(prev, wrd, 1);
-}
-
-//just like readInWord, but for save words.
-//creates a new node if previous is not found
-void Graph::readInSaveWord(Vertex* previous, string word, int count){
-  //find it
-  Vertex* wrd = findVertex(word);
-
-
-  //if it hasn't been read yet
-  if(wrd == nullptr){
-    wrd = createWord(word);
-  }
-
-  //create or increase the connection by 1
-  createConnection(previous, wrd, count);
+    //read in the rest of the lines
+    while(getline(fileReader, line)){
+      //make sure the line isn't empty
+      if(line == "")
+        continue;
+      //empty the stream
+      ss.clear();
+      //give it the line
+      ss << line;
+      //read the words
+      while(getline(ss, current, ' ')){
+        //clean the word
+        cleanWord(current);
+        //make sure it isn't empty
+        if(current == "")
+          continue;
+        //add it in
+        readInWord(previous, current);
+        //move to the next word
+        previous = current;
+      }
+    }
+    fileReader.close();
 }
 
 //reads in entire saved file (calls read in save word function)
@@ -96,24 +97,6 @@ void Graph::readInSaveFile(string fileName){
     }
     reader.close();
     cout << "The save file was successfully accessed. Please continue." <<endl;
-}
-
-void Graph::saveHelper(trieNode* node, ofstream &writer){
-    if (node == nullptr){
-        return;
-    }
-    //if node points to a word, save that into new line on file then save edge list; (if edge list is empty?)
-    if (node->word != nullptr){
-        writer << "\n" << node->word->name << ":";
-        int tempSize = node->word->Edges.size();
-        for (int i=0; i< tempSize; i++){
-            writer << node->word->Edges[i].v->name << "*" << node->word->Edges[i].frequency << ",";
-        }
-    }
-    int size = node->nextLetters.size();
-    for (int i=0; i<size; i++){
-        saveHelper(node->nextLetters[i], writer);
-    }
 }
 
 
@@ -301,7 +284,47 @@ string Graph::promptWord(){
 
 
 
+
+
+
 //Private
+
+
+//deals with finding the word, then adds a node if needed and calls createConnection
+//assumes the previous is START if not found
+void Graph::readInWord(string previous, string word){
+  //find them
+  Vertex* prev = findVertex(previous);
+  Vertex* wrd = findVertex(word);
+
+  //if it's the first word
+  if(prev == nullptr){
+    prev = root->word;
+  }
+  //if it hasn't been read yet
+  if(wrd == nullptr){
+    wrd = createWord(word);
+  }
+
+  //create or increase the connection by 1
+  createConnection(prev, wrd, 1);
+}
+
+//just like readInWord, but for save words.
+//creates a new node if previous is not found
+void Graph::readInSaveWord(Vertex* previous, string word, int count){
+  //find it
+  Vertex* wrd = findVertex(word);
+
+
+  //if it hasn't been read yet
+  if(wrd == nullptr){
+    wrd = createWord(word);
+  }
+
+  //create or increase the connection by 1
+  createConnection(previous, wrd, count);
+}
 
 //recursively deletes the tree
 void Graph::deleteTrieHelper(trieNode*& node){
@@ -448,4 +471,24 @@ void Graph::displayEdgesHelper(trieNode* node){
   for(int i = 0; i < node->nextLetters.size(); i++){
     displayEdgesHelper(node->nextLetters[i]);
   }
+}
+
+
+
+void Graph::saveHelper(trieNode* node, ofstream &writer){
+    if (node == nullptr){
+        return;
+    }
+    //if node points to a word, save that into new line on file then save edge list; (if edge list is empty?)
+    if (node->word != nullptr){
+        writer << "\n" << node->word->name << ":";
+        int tempSize = node->word->Edges.size();
+        for (int i=0; i< tempSize; i++){
+            writer << node->word->Edges[i].v->name << "*" << node->word->Edges[i].frequency << ",";
+        }
+    }
+    int size = node->nextLetters.size();
+    for (int i=0; i<size; i++){
+        saveHelper(node->nextLetters[i], writer);
+    }
 }
